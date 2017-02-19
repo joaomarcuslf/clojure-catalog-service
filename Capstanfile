@@ -9,8 +9,8 @@ base: cloudius/osv-openjdk8
 #
 # The command line passed to OSv to start up the application.
 #
-#cmdline: /java.so -cp /clojure-catalog-service/app.jar clojure.main -m clojure-catalog-service
-cmdline: /java.so -jar /clojure-catalog-service/app.jar
+#cmdline: /java.so -cp /clojure_catalog_service/app.jar clojure.main -m clojure-catalog-service
+cmdline: /java.so -jar /clojure_catalog_service/app.jar
 
 #
 # The command to use to build the application.
@@ -25,5 +25,5 @@ cmdline: /java.so -jar /clojure-catalog-service/app.jar
 # List of files that are included in the generated image.
 #
 files:
-  /clojure-catalog-service/app.jar: ./target/clojure-catalog-service-0.0.1-SNAPSHOT-standalone.jar
+  /clojure_catalog_service/app.jar: ./target/clojure-catalog-service-0.0.1-SNAPSHOT-standalone.jar
 
