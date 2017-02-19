@@ -59,7 +59,7 @@
               ;; Either :jetty, :immutant or :tomcat (see comments in project.clj)
               ::http/type :jetty
               ;;::http/host "localhost"
-              ::http/port (Integer. (or (System/getenv "PORT") ))
+              ::http/port (Integer. (or (System/getenv "PORT") 8080))
               ;; Options to pass to the container (Jetty)
               ::http/container-options {:h2c? true
                                         :h2? false
