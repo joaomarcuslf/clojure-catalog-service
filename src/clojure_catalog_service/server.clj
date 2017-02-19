@@ -10,12 +10,11 @@
   "The entry-point for 'lein run-dev'"
   [& args]
   (println "\nCreating your [DEV] server...")
-  (-> service/service ;; start with production configuration
+  (-> service/service ;;
       (merge {:env :dev
               ::server/join? false
               ::server/routes #(route/expand-routes (deref #'service/routes))
               ::server/allowed-origins {:creds true :allowed-origins (constantly true)}})
-      ;; Wire up interceptor chains
       server/default-interceptors
       server/dev-interceptors
       server/create-server

@@ -29,7 +29,8 @@
 ;; POST /projects
 (defn add-project
   [request]
-  (http/json-response mocked-json))
+  (prn (:json-params request))
+  (ring-resp/created "fake URL" "fake 201 in the body"))
 
 ;; GET /projects/:name
 (defn get-project
@@ -51,8 +52,6 @@
                     :post add-project}]
       ["/projects/:name" {:get get-project}]
       ["/about" {:get about-page}]]]])
-
-
 
 (def service {:env :prod
               ::http/routes routes
