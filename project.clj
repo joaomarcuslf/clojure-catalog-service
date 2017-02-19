@@ -10,7 +10,8 @@
                  [org.slf4j/jul-to-slf4j "1.7.22"]
                  [org.slf4j/jcl-over-slf4j "1.7.22"]
                  [org.slf4j/log4j-over-slf4j "1.7.22"]
-                 [lein-light-nrepl "0.0.18"]]
+                 [lein-light-nrepl "0.0.18"]
+                 [com.novemberain/monger "2.0.0"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"]
   :repl-options {:timeout 120000 :nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
