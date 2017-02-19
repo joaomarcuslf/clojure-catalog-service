@@ -13,7 +13,7 @@
                  [lein-light-nrepl "0.0.18"]]
   :min-lein-version "2.0.0"
   :resource-paths ["config", "resources"]
-  :repl-options {:nrepl-middleware [lighttable.nrepl.handles/lighttable-ops]}
+  :repl-options {:timeout 120000 :nrepl-middleware [lighttable.nrepl.handler/lighttable-ops]}
   :profiles {:dev {:aliases {"run-dev" ["trampoline" "run" "-m" "clojure-catalog-service.server/run-dev"]}
                    :dependencies [[io.pedestal/pedestal.service-tools "0.5.2"]]}
              :uberjar {:aot [clojure-catalog-service.server]}}
