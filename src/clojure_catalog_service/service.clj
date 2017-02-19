@@ -4,54 +4,64 @@
             [io.pedestal.http.body-params :as body-params]
             [ring.util.response :as ring-resp]))
 
+;; Mocked Json Response
+(def mocked-json { :project1 { :name "João Marcus" } :project2 { :name "Hellow World" } })
+
+;; Routes Functions
+
+;; GET /about
 (defn about-page
   [request]
   (ring-resp/response (format "Clojure %s - served from %s"
                               (clojure-version)
                               (route/url-for ::about-page))))
 
+;; GET /
 (defn home-page
   [request]
   (ring-resp/response "Hello World!"))
 
+;; GET /projects
+(defn get-projects
+  [request]
+  (http/json-response mocked-json))
+
+;; POST /projects
+(defn add-project
+  [request]
+  (http/json-response mocked-json))
+
+;; GET /projects/:name
+(defn get-project
+  [request]
+  (let [projectname (get-in request [:path-params :name])] ;; Get-in will follow an sequence of keys
+    (http/json-response ((keyword projectname) mocked-json))))
+
+;; Interceptors
+
 (def common-interceptors [(body-params/body-params) http/html-body])
+
+
+;; Routes
 
 (def routes
   `[[["/" {:get home-page}
       ^:interceptors [(body-params/body-params) http/html-body]
+      ["/projects" {:get get-projects
+                    :post add-project}]
+      ["/projects/:name" {:get get-project}]
       ["/about" {:get about-page}]]]])
 
 
-;; Consumed by clojure-catalog-service.server/create-server
-;; See http/default-interceptors for additional options you can configure
+
 (def service {:env :prod
-              ;; You can bring your own non-default interceptors. Make
-              ;; sure you include routing and set it up right for
-              ;; dev-mode. If you do, many other keys for configuring
-              ;; default interceptors will be ignored.
-              ;; ::http/interceptors []
               ::http/routes routes
-
-              ;; Uncomment next line to enable CORS support, add
-              ;; string(s) specifying scheme, host and port for
-              ;; allowed source(s):
-              ;;
-              ;; "http://localhost:8080"
-              ;;
-              ;;::http/allowed-origins ["scheme://host:port"]
-
-              ;; Root for resource interceptor that is available by default.
+              ::http/allowed-origins ["*"]
               ::http/resource-path "/public"
-
-              ;; Either :jetty, :immutant or :tomcat (see comments in project.clj)
               ::http/type :jetty
               ;;::http/host "localhost"
               ::http/port (Integer. (or (System/getenv "PORT") 8080))
-              ;; Options to pass to the container (Jetty)
               ::http/container-options {:h2c? true
                                         :h2? false
-                                        ;:keystore "test/hp/keystore.jks"
-                                        ;:key-password "password"
-                                        ;:ssl-port 8443
                                         :ssl? false}})
 
