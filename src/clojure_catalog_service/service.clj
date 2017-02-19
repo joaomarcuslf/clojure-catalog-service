@@ -45,13 +45,12 @@
 ;; Routes
 
 (def routes
-  `[[["/api/" {}
+  `[[["/api" {}
       ^:interceptors [(body-params/body-params) http/html-body]
-      ["/v1/" {}
-       ["/projects/" {}
-        ["/" {:get get-projects
+      ["/v1" {}
+       ["/projects" {:get get-projects
               :post add-project}]
-        ["/:name" {:get get-project}]]]]]])
+        ["/projects/:name" {:get get-project}]]]]])
 
 (def service {:env :prod
               ::http/routes routes
