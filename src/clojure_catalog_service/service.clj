@@ -17,7 +17,7 @@
 (defn token-checker [request]
   (let [token (get-in request [:headers "x-access-token"])]
     (if (= (type token) nil)
-      (assoc (http/json-response {:body "forbidden"}) :status 403))))
+      (assoc (http/json-response {:error "Forbidden" :message "Forbidden access without token"}) :status 403))))
 
 ;; Routes Functions
 
