@@ -54,7 +54,7 @@
 
 (def service {:env :prod
               ::http/routes routes
-              ::http/allowed-origins ["*"]
+              ::http/allowed-origins {:creds true :allowed-origins (constantly true)}
               ::http/resource-path "/public"
               ::http/type :jetty
               ;;::http/host "localhost"
