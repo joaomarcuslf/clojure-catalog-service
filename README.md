@@ -15,6 +15,7 @@ Clojure Microservice using Pedestal module
 ## Env Variables
 
 **MONGO_CONNECTION**: URL For mongoDB connection *Default: mongodb://localhost:27017/clojure-catalog-service*
+
 **PORT**: Port for service startup *Default: 8080*
 
 ## REPL
