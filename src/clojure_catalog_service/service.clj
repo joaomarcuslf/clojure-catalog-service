@@ -7,14 +7,17 @@
             [monger.json]
             [ring.util.response :as ring-resp]))
 
-;; Mocked Json Response
-(def mocked-json { :project1 { :name "João Marcus" } :project2 { :name "Hellow World" } })
-
 (defn get-uri []
   (String. (or (System/getenv "MONGO_CONNECTION") "mongodb://localhost:27017/clojure-catalog-service")))
 
 (defn db-get-project [project-name]
-  (let [uri (get-uri) {:keys [conn db]} (mg/connect-via-uri uri)]))
+  (let [uri (get-uri) {:keys [conn db]} (mg/connect-via-uri uri)]
+    (mc/find-maps db "projects" {:name project-name})))
+
+(defn token-checker [request]
+  (let [token (get-in request [:headers "x-access-token"])]
+    (if (= (type token) nil)
+      (assoc (http/json-response {:body "forbidden"}) :status 403))))
 
 ;; Routes Functions
 
@@ -35,18 +38,14 @@
 (defn get-project
   [request]
   (let [projectname (get-in request [:path-params :name])] ;; Get-in will follow an sequence of keys
-    (http/json-response ((keyword projectname) mocked-json))))
-
-;; Interceptors
-
-(def common-interceptors [(body-params/body-params) http/html-body])
+    (http/json-response (db-get-project projectname))))
 
 
 ;; Routes
 
 (def routes
   `[[["/api" {}
-      ^:interceptors [(body-params/body-params) http/html-body]
+      ^:interceptors [(body-params/body-params) http/html-body token-checker]
       ["/v1" {}
        ["/projects" {:get get-projects
               :post add-project}]
